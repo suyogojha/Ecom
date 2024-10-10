@@ -60,3 +60,33 @@ def register_user(request):
 
     else:
         return render(request, 'register.html', {'form':form})
+
+
+
+
+def product(request, pk):
+    product = Product.objects.get(id=pk)
+    return render(request, 'product.html', {'product':product})
+    
+
+    
+
+def category(request, foo):
+    # replace hyphens with spaces in url 
+    foo = foo.replace('-', ' ')
+    #grab the category from the url 
+    try:
+        #look to category 
+        category = Category.objects.get(name=foo)
+        products = Product.objects.filter(category=category)
+        return render(request, 'category.html', {'products':products, 'category': category})
+        
+    except:
+        messages.success(request, ("You Dont have category"))
+        return redirect('homes')
+    
+
+
+
+
+
