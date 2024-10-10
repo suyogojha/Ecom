@@ -1,4 +1,5 @@
 from store.models import *
+from store.views import *
 
 
 class Cart():
@@ -16,13 +17,15 @@ class Cart():
         self.cart = cart 
             
         
-    def add(self, product):
+    def add(self, product, quantity):
         product_id = str(product.id)
+        product_qty = str(quantity)
         #logic 
         if product_id in self.cart:
             pass
         else:
-            self.cart[product_id] = {'price': str(product.price)}
+            # self.cart[product_id] = {'price': str(product.price)}
+            self.cart[product_id] = int(product_qty)
         self.session.modified = True
         
     def __len__(self):
@@ -36,3 +39,34 @@ class Cart():
         products = Product.objects.filter(id__in=product_ids)
         return products
         
+        
+    def get_quants(self):
+        quantities = self.cart
+        return quantities
+    
+    
+    def update(self, product, quantity):
+        product_id = str(product)
+        product_qty = int(quantity)
+        # get the cart
+        ourcart = self.cart
+        # update dictonary 
+        ourcart[product_id] = product_qty
+        
+        self.session.modified = True
+        
+        thing = self.cart
+        return thing
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
