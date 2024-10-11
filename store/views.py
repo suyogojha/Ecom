@@ -12,11 +12,13 @@ from django import forms
 
 def home(request):
     products = Product.objects.all()
-    return render(request, 'home.html', {'products': products})
+    categories = Category.objects.all()
+    return render(request, 'home.html', {'products': products, 'categories': categories})
 
 
 def about(request):
-    return render(request, 'about.html')
+    categories = Category.objects.all()
+    return render(request, 'about.html', {'categories': categories})
 
 def login_user(request):
     if request.method == "POST":
@@ -84,9 +86,11 @@ def category(request, foo):
     except:
         messages.success(request, ("You Dont have category"))
         return redirect('homes')
+
+
+def category_summary(request):
+    categories = Category.objects.all()
+    return render(request, 'category_summary.html', {'categories': categories})
     
-
-
-
 
 

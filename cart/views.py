@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from .cart import Cart
 from store.models import *
 from django.http import JsonResponse
+from django.contrib import messages
+
 
 
 # Create your views here.
@@ -12,7 +14,9 @@ def cart_summary(request):
     #show card number in cart 
     quantities = cart.get_quants
     
-    return render(request, "cart_summary.html", {"cart_products": cart_products, "quantities": quantities})
+    totals = cart.cart_total()
+    
+    return render(request, "cart_summary.html", {"cart_products": cart_products, "quantities": quantities, 'totals': totals})
 
 def cart_add(request):
     cart = Cart(request)
@@ -36,13 +40,23 @@ def cart_add(request):
         #return response
         # response = JsonResponse({'Product Name': product.name})
         response = JsonResponse({'qty': cart_quantity})
+        
+        messages.success(request, (f"Added Successfully"))
+        
         return response
         
 
     return render(request, "cart_add.html", {})
 
 def cart_delete(request):
-    return render(request, "cart_delete.html", {})
+        cart = Cart(request)
+        if request.POST.get('action') == 'post':
+            product_id = int(request.POST.get('product_id'))
+            cart.delete(product=product_id)
+            response = JsonResponse({'product':product_id})
+            messages.success(request, ("Successfully deleted"))
+            return response
+
 
 def cart_update(request):
     cart = Cart(request)
@@ -51,4 +65,5 @@ def cart_update(request):
         product_qty = int(request.POST.get('product_qty'))
         cart.update(product=product_id, quantity=product_qty)
         response = JsonResponse({'qty':product_qty})
+        messages.success(request, (f"Update Successfully"))
         return response
