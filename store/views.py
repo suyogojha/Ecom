@@ -12,6 +12,9 @@ from django.db.models import Q
 import json
 from cart.cart import *
 
+from payment.models import *
+from payment.forms import *
+
 def home(request):
     products = Product.objects.all()
     categories = Category.objects.all()
@@ -155,21 +158,25 @@ def update_info(request):
 		# Get Current User
 		current_user = Profile.objects.get(user__id=request.user.id)
 		# Get Current User's Shipping Info
+		shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
 		
 		# Get original User Form
 		form = UserInfoForm(request.POST or None, instance=current_user)
 		# Get User's Shipping Form
-		if form.is_valid():
+		shipping_form = ShippingForm(request.POST or None, instance=shipping_user)		
+		if form.is_valid() or shipping_form.is_valid():
 			# Save original form
 			form.save()
 			# Save shipping form
+			shipping_form.save()
 
 			messages.success(request, "Your Info Has Been Updated!!")
 			return redirect('home')
-		return render(request, "update_info.html", {'form':form})
+		return render(request, "update_info.html", {'form':form, 'shipping_form':shipping_form})
 	else:
 		messages.success(request, "You Must Be Logged In To Access That Page!!")
 		return redirect('home')
+
 
 
 
