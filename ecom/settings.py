@@ -22,7 +22,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-2893.up.railway.app',  # Add your production URL here
+]
 
 
 
