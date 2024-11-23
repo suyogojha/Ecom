@@ -124,13 +124,24 @@ USE_TZ = True
 
 STATIC_URL = '/static/'  # Ensure it starts and ends with a slash
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Path to your static files directory
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Deployment location for `collectstatic`
 
-MEDIA_URL = '/media/'  # Ensure it starts and ends with a slash
+MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Path to your media files
 
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+MEDIA_ROOT = ""
+
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
+
+
+
 
 
 # Default primary key field type
