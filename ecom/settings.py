@@ -121,13 +121,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = ['static/'] 
-STATIC_ROOT = os.path.join(BASE_DIR / 'staticfiles')
+STATIC_URL = '/static/'  # Ensure it starts and ends with a slash
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Path to your static files directory
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Deployment location for `collectstatic`
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
+MEDIA_URL = '/media/'  # Ensure it starts and ends with a slash
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Path to your media files
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
