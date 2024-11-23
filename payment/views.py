@@ -343,26 +343,36 @@ def billing_info(request):
         return redirect('home')
     
     
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect   
     
+
 def checkout(request):
-	# Get the cart
-	cart = Cart(request)
-	cart_products = cart.get_prods
-	quantities = cart.get_quants
-	totals = cart.cart_total()
+    # Add a login message if the user is redirected here
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to log in first to proceed to checkout.")
+        return redirect('/register/')  # Redirect to registration or login page
 
-	if request.user.is_authenticated:
-		# Checkout as logged in user
-		# Shipping User
-		shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
-		# Shipping Form
-		shipping_form = ShippingForm(request.POST or None, instance=shipping_user)
-		return render(request, "payment/checkout.html", {"cart_products":cart_products, "quantities":quantities, "totals":totals, "shipping_form":shipping_form })
-	else:
-		# Checkout as guest
-		shipping_form = ShippingForm(request.POST or None)
-		return render(request, "payment/checkout.html", {"cart_products":cart_products, "quantities":quantities, "totals":totals, "shipping_form":shipping_form})
+    # Get the cart
+    cart = Cart(request)
+    cart_products = cart.get_prods
+    quantities = cart.get_quants
+    totals = cart.cart_total()
 
+    try:
+        # Retrieve the user's shipping address if available
+        shipping_user = ShippingAddress.objects.get(user=request.user)
+        shipping_form = ShippingForm(request.POST or None, instance=shipping_user)
+    except ShippingAddress.DoesNotExist:
+        # If no existing shipping address, create a blank form
+        shipping_form = ShippingForm(request.POST or None)
+
+    return render(request, "payment/checkout.html", {
+        "cart_products": cart_products,
+        "quantities": quantities,
+        "totals": totals,
+        "shipping_form": shipping_form,
+    })
 	
 
 def payment_success(request):

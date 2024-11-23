@@ -23,6 +23,8 @@
         <center>
             <br>
             <div class="col-8">
+                <span>New User?? <a href="{% url 'register' %}">Register</a> </span>
+
                 <br><br>
                 <form method="POST" action="{% url 'login' %}">
                     {% csrf_token %}

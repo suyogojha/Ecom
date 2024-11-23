@@ -48,7 +48,7 @@ def login_user(request):
 				for key,value in converted_cart.items():
 					cart.db_add(product=key, quantity=value)
 
-			messages.success(request, ("You Have Been Logged In!"))
+			messages.success(request, (f"{user} You Have Been Logged In!"))
 			return redirect('home')
 		else:
 			messages.success(request, ("There was an error, please try again..."))
@@ -58,8 +58,9 @@ def login_user(request):
 		return render(request, 'login.html', {})
 
 def logout_user(request):
+    name = request.user
     logout(request)
-    messages.success(request, ("You have logged out.."))
+    messages.success(request, (f"{name} You have logged out.."))
     return redirect('home')
 
 
