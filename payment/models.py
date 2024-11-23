@@ -18,9 +18,10 @@ class Order(models.Model):
 	date_ordered = models.DateTimeField(auto_now_add=True)	
 	shipped = models.BooleanField(default=False)
 	date_shipped = models.DateTimeField(blank=True, null=True)
-	
+	invoice = models.CharField(max_length=100, blank=True, null=True)
+	paid = models.BooleanField(default=False)
 	def __str__(self):
-		return f'Order - {str(self.id)}'
+		return f'Shipping Address - {str(self.id)}'
 
 
 class ShippingAddress(models.Model):
